@@ -1,0 +1,8 @@
+{
+    "User": {
+        "KeyBinds": {
+            "RetryButton": "Y",
+            "ReadyButton": "G"
+        }
+    }
+}

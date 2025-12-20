@@ -15,10 +15,14 @@ cmake .. -DCMAKE_BUILD_TYPE=Release
 
 ---
 
-### How to use (Read if you are using custom keybind in your game client)
+### How to use
+    build, run executable and then press ready and it will work at all game instances at once
+---
+
+### Custom Keybinds
     find user config in project_folder/resources/user/user.json
-    and set buttons that you are using in you game client to press ready button and retry button. The buttons must be the same for all game instances/clients
-    button names you can look below
+    and set buttons that you are using in you game client to press ready button and retry button.
+    The buttons must be the same for all game instances/clients
 
 ---
 # Input Mappings

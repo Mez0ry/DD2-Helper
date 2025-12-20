@@ -4,7 +4,7 @@ This project contains utility functions to assist you in various ways, such as a
 
 ---
 
-## Build Instructions
+### Build Instructions
 
 ```bash
 git clone --recurse-submodules https://github.com/Mez0ry/DD2-Helper.git
@@ -15,15 +15,15 @@ cmake .. -DCMAKE_BUILD_TYPE=Release
 
 ---
 
-## How to use
-    - **[Read if you are using custom keybind in your game client]**
+### How to use (Read if you are using custom keybind in your game client)
     find user config in project_folder/resources/user/user.json
     and set buttons that you are using in you game client to press ready button and retry button. The buttons must be the same for all game instances/clients
     button names you can look below
 
+---
 # Input Mappings
 
-## Keyboard Keys
+### Keyboard Keys
 
 - **BACK**
 - **TAB**

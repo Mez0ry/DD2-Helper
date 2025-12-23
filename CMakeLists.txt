@@ -63,6 +63,8 @@ set(HEADER_FILES
     ${CMAKE_SOURCE_DIR}/include/KeyboardInput.hpp
     ${CMAKE_SOURCE_DIR}/include/MouseInput.hpp
     ${CMAKE_SOURCE_DIR}/include/UserConfig.hpp
+    ${CMAKE_SOURCE_DIR}/include/JsonFileWatcher.hpp
+
 )
 
 set(SOURCE_FILES 
@@ -72,6 +74,7 @@ set(SOURCE_FILES
     ${CMAKE_SOURCE_DIR}/src/KeyboardInput.cpp
     ${CMAKE_SOURCE_DIR}/src/MouseInput.cpp
     ${CMAKE_SOURCE_DIR}/src/UserConfig.cpp
+    ${CMAKE_SOURCE_DIR}/src/JsonFileWatcher.cpp
 )
 
 add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES})

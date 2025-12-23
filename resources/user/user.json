@@ -2,7 +2,7 @@
     "User": {
         "KeyBinds": {
             "RetryButton": "Y",
-            "ReadyButton": "G"
+            "ReadyButton": "MBUTTON"
         }
     }
 }

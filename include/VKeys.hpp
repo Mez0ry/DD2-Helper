@@ -5,6 +5,7 @@
 
 enum class VKeys : unsigned long long
 {
+    UNKNOWN,
     BACK = 0x08,
     TAB = 0x09,
     CLEAR = 0x0C,

@@ -2,6 +2,7 @@
 #include "KeyboardInput.hpp"
 #include "MouseInput.hpp"
 #include "UserConfig.hpp"
+#include "JsonFileWatcher.hpp"
 
 #include <iostream>
 
@@ -15,6 +16,11 @@ App::~App() {
 }
 
 void App::Run() {
+    JsonFileWatcher user_config_watcher("./resources/user/user.json");
+    user_config_watcher.StartMonitoring([&user_config_watcher]() {
+        User::GetInstance()->ParseConfig(user_config_watcher.GetFilePath());
+    });
+
     while(m_bIsRunning){
        HandleInput();
        Update();

@@ -85,15 +85,11 @@ if(${CMAKE_BUILD_TYPE} MATCHES "Release")
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         target_compile_options(${PROJECT_NAME} PRIVATE
             -O3
-            -DNDEBUG         
-            -flto             
+            -DNDEBUG                  
             -march=native    
             -mtune=native
             -funroll-loops   
             -fomit-frame-pointer
-        )
-        target_link_options(${PROJECT_NAME} PRIVATE
-            -flto
         )
     endif()
 endif()

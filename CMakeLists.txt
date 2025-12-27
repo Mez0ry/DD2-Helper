@@ -64,6 +64,7 @@ set(HEADER_FILES
     ${CMAKE_SOURCE_DIR}/include/MouseInput.hpp
     ${CMAKE_SOURCE_DIR}/include/UserConfig.hpp
     ${CMAKE_SOURCE_DIR}/include/JsonFileWatcher.hpp
+    ${CMAKE_SOURCE_DIR}/include/KeySequence.hpp
 
 )
 
@@ -75,10 +76,27 @@ set(SOURCE_FILES
     ${CMAKE_SOURCE_DIR}/src/MouseInput.cpp
     ${CMAKE_SOURCE_DIR}/src/UserConfig.cpp
     ${CMAKE_SOURCE_DIR}/src/JsonFileWatcher.cpp
+    ${CMAKE_SOURCE_DIR}/src/KeySequence.cpp
 )
 
 add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES})
 add_dependencies(${PROJECT_NAME} copy_resources)
+if(${CMAKE_BUILD_TYPE} MATCHES "Release")
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(${PROJECT_NAME} PRIVATE
+            -O3
+            -DNDEBUG         
+            -flto             
+            -march=native    
+            -mtune=native
+            -funroll-loops   
+            -fomit-frame-pointer
+        )
+        target_link_options(${PROJECT_NAME} PRIVATE
+            -flto
+        )
+    endif()
+endif()
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include)
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
@@ -91,6 +109,24 @@ set_target_properties(${PROJECT_NAME}
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${PROCESSOR_ARHITECTURE_TYPE}/bin"
     PDB_OUTPUT_DIRECTORY     "${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${PROCESSOR_ARHITECTURE_TYPE}/bin"
 )
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        -O3
+        -DNDEBUG
+        -march=native
+        -mtune=native
+        -funroll-loops
+        -fomit-frame-pointer
+    )
+elseif(MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        /O2
+        /Ob2
+        /DNDEBUG
+        /GL
+    )
+endif()
 
 #vendor rapidjson
     #target_link_libraries(${PROJECT_NAME} RapidJSON::RapidJSON)

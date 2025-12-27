@@ -2,7 +2,8 @@
     "User": {
         "KeyBinds": {
             "RetryButton": "Y",
-            "ReadyButton": "MBUTTON"
+            "ReadyButton": "MBUTTON",
+            "InitiateBuff": ["X_BUTTON1"]
         }
     }
 }

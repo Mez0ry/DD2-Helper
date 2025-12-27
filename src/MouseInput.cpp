@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <vector>
 #include <sstream>
+#include <algorithm>
 
 const std::unordered_map<std::string, VKeys> MouseInput::m_VButtonStrMap = {
     {"LBUTTON", VKeys::LBUTTON},
@@ -14,7 +15,14 @@ const std::unordered_map<std::string, VKeys> MouseInput::m_VButtonStrMap = {
     {"X_BUTTON2", VKeys::X_BUTTON2},
 };
 
-bool MouseInput::HasButtonKey(const std::string &vbutton_str) {
+bool MouseInput::HasButton(const VKeys key)
+{
+    auto it = std::find_if(m_VButtonStrMap.begin(), m_VButtonStrMap.end(), [&](const decltype(m_VButtonStrMap)::value_type &v) { return v.second == key; });
+    return (it != m_VButtonStrMap.end());
+}
+
+bool MouseInput::HasButton(const std::string &vbutton_str)
+{
     return m_VButtonStrMap.find(vbutton_str) != m_VButtonStrMap.end();
 }
 

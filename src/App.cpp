@@ -3,10 +3,13 @@
 #include "MouseInput.hpp"
 #include "UserConfig.hpp"
 #include "JsonFileWatcher.hpp"
+#include "KeySequence.hpp"
 
 #include <iostream>
+#include <algorithm>
+#include <thread>
 
-App::App() : m_bIsRunning(true), m_HostWindow(FindWindowW(NULL, L"Dungeon Defenders 2")){
+App::App() : m_bIsRunning(true), m_HostWindow(Window::Find(L"Dungeon Defenders 2")){
     
     m_AltWindows = Window::FindAll(L"[#] Dungeon Defenders 2 [#]");
 }
@@ -25,39 +28,54 @@ void App::Run() {
        HandleInput();
        Update();
        Render();
+
+       Sleep(50);
     }
 }
 
 void App::HandleInput()
 {
-    auto any_type_button_pressed = [](VKeys key){
-        return (MouseInput::IsButtonPressed(key) || KeyboardInput::IsKeyPressed(key));
-    };
-    
     auto user_ready_button = User::GetInstance()->GetKeyBind("ReadyButton");
     auto user_retry_button = User::GetInstance()->GetKeyBind("RetryButton");
+    auto initiate_buff = User::GetInstance()->GetKeyBind("InitiateBuff");
 
-    if (any_type_button_pressed(user_ready_button))
+    if (user_ready_button.IsKeysPressed())
     {
-        KeyboardInput::PressKey(m_HostWindow, user_ready_button, 50, 50);
-        for (auto &win : m_AltWindows)
-        {
-            KeyboardInput::PressKey(win, user_ready_button, 50, 50);
-        }
-        
-    }else if(any_type_button_pressed(user_retry_button)){
-        KeyboardInput::PressKey(m_HostWindow, user_retry_button, 50, 50);
+        user_ready_button.PressKeys(m_HostWindow, 50, 50);
 
         for (auto &win : m_AltWindows)
         {
-            KeyboardInput::PressKey(win, user_retry_button, 50, 50);
+            user_ready_button.PressKeys(win, 50, 50);
+        }
+
+    }else if(user_retry_button.IsKeysPressed()){
+        user_retry_button.PressKeys(m_HostWindow, 50, 50);
+
+        for (auto &win : m_AltWindows)
+        {
+            user_retry_button.PressKeys(win, 50, 50);
+        }
+    }else if(initiate_buff.IsKeysPressed()){
+
+        if(m_HostWindow.IsForegrounded() && !m_HostWindow.IsBuffing()){
+            m_HostWindow.StartInitiateBuffing();
+        }else if(m_HostWindow.IsBuffing()){
+            m_HostWindow.StopInitiateBuffing();
+        }
+
+        for(auto& win : m_AltWindows){
+            if(win.IsForegrounded() && !win.IsBuffing()){
+                win.StartInitiateBuffing();
+            }else if(win.IsBuffing()){
+                win.StopInitiateBuffing();
+            }
         }
     }
 }
 
 void App::Update()
 {
-   
+ 
 }
 
 void App::Render() {

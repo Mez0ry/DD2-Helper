@@ -1,8 +1,10 @@
 #include "KeyboardInput.hpp"
+#include "KeyStates.hpp"
+
 #include <stdexcept>
 #include <vector>
 #include <sstream>
-#include "KeyStates.hpp"
+#include <algorithm>
 
 const std::unordered_map<std::string, VKeys> KeyboardInput::m_VkeysStrMap = {
     {"BACK", VKeys::BACK},
@@ -98,7 +100,14 @@ const std::unordered_map<std::string, VKeys> KeyboardInput::m_VkeysStrMap = {
     {"F24", VKeys::F24}
 };
 
-bool KeyboardInput::HasButtonKey(const std::string &vkey_str) {
+bool KeyboardInput::HasKey(const VKeys key)
+{
+    auto it = std::find_if(m_VkeysStrMap.begin(), m_VkeysStrMap.end(), [&](const decltype(m_VkeysStrMap)::value_type &v) { return v.second == key; });
+    return (it != m_VkeysStrMap.end());
+}
+
+bool KeyboardInput::HasKey(const std::string &vkey_str)
+{
     return m_VkeysStrMap.find(vkey_str) != m_VkeysStrMap.end();
 }
 
@@ -140,36 +149,4 @@ bool KeyboardInput::ReleaseKey(HWND window_descriptor, VKeys key, uint16_t key_r
 bool KeyboardInput::PressKey(HWND window_descriptor, VKeys key, uint16_t hold_time_ms, uint16_t key_released_time_ms)
 {
     return HoldKey(window_descriptor, key, hold_time_ms) && ReleaseKey(window_descriptor, key, key_released_time_ms);
-}
-
-bool KeyboardInput::PressKeySequense(HWND window_descriptor, const std::string &key_sequence, uint16_t hold_time_ms, uint16_t key_released_time_ms, const char delimiter)
-{
-    std::string seq_cpy = key_sequence;
-    std::vector<std::string> keys;
-
-    std::stringstream ss(seq_cpy);
-    std::string item;
-
-    while (std::getline(ss, item, delimiter))
-    {
-        size_t start = item.find_first_not_of(" \t");
-        size_t end = item.find_last_not_of(" \t");
-
-        if (start != std::string::npos && end != std::string::npos){
-            item = item.substr(start, end - start + 1);
-        }
-
-        keys.push_back(item);
-    }
-
-    bool success = true;
-
-    for(auto& key : keys){
-        auto is_pressed = PressKey(window_descriptor, KeyboardInput::VKeyFromStr(key), hold_time_ms, key_released_time_ms);
-        if(!is_pressed){
-            success = false;
-        }
-    }
-
-    return success;
 }

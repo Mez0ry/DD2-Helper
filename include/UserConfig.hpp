@@ -8,6 +8,8 @@
 #include "VKeys.hpp"
 #include <string>
 
+class KeySequence;
+
 class User
 {
 private:
@@ -20,16 +22,14 @@ private:
     };
     
     mutable std::shared_mutex m_KeybindsMutex;
-    static std::unordered_map<std::string, VKeys> m_KeyBindsStr;
-    
+    static std::unordered_map<std::string, KeySequence> m_KeyBindsStr;
 public:
     User(Private);
     [[nodiscard]] static std::shared_ptr<User> GetInstance() noexcept;
 
-    VKeys GetKeyBind(const std::string& key_name) const;
+    KeySequence GetKeyBind(const std::string& key_name) const;
 
     void ParseConfig(const std::string_view path) const;
-
 private:
     User() = default;
     ~User() = default;

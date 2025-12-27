@@ -1,4 +1,6 @@
 #include "UserConfig.hpp"
+#include "KeySequence.hpp"
+
 #include "rapidjson/document.h"
 #include "MouseInput.hpp"
 #include "KeyboardInput.hpp"
@@ -10,7 +12,7 @@
 std::mutex User::m_Mutex;
 std::once_flag User::m_InitFlag;
 std::shared_ptr<User> User::m_Instance;
-std::unordered_map<std::string, VKeys> User::m_KeyBindsStr = {};
+std::unordered_map<std::string, KeySequence> User::m_KeyBindsStr = {};
 
 User::User(Private)
 {
@@ -24,19 +26,19 @@ std::shared_ptr<User> User::GetInstance() noexcept
     std::call_once(m_InitFlag, [&](){ 
         m_Instance = std::shared_ptr<User>(new User(Private()), [&](auto l)
         {
-                delete l; 
+            delete l; 
         }); 
     });
 
     return m_Instance;
 }
 
-VKeys User::GetKeyBind(const std::string &key_name) const
+KeySequence User::GetKeyBind(const std::string &key_name) const
 {
     std::shared_lock lock(m_KeybindsMutex);
     
     if(m_KeyBindsStr.empty()){
-        return VKeys::UNKNOWN;
+        return KeySequence();
     }
 
     auto it = m_KeyBindsStr.find(key_name);
@@ -95,14 +97,28 @@ void User::ParseConfig(const std::string_view path) const
                 if (it->value.IsString())
                 {
                     auto button_name = std::string(it->name.GetString());
-                    if (MouseInput::HasButtonKey(it->value.GetString()))
+                    if (MouseInput::HasButton(it->value.GetString()))
                     {
                         m_KeyBindsStr.insert(std::make_pair(button_name, MouseInput::VButtonKeyFromStr(it->value.GetString())));
                     }
-                    else if (KeyboardInput::HasButtonKey(it->value.GetString()))
+                    else if (KeyboardInput::HasKey(it->value.GetString()))
                     {
                         m_KeyBindsStr.insert(std::make_pair(button_name, KeyboardInput::VKeyFromStr(it->value.GetString())));
                     }
+                }else if(it->value.IsArray()){
+                    std::string sequence;
+                    sequence.reserve(10);
+
+                    auto button_name = std::string(it->name.GetString());
+                    const auto& value_array = it->value.GetArray();
+
+                    for (auto& v : value_array) {
+                        if (v.IsString()) {
+                            sequence += std::string(v.GetString()) + ' ';
+                        }
+                    }
+
+                    m_KeyBindsStr.insert(std::make_pair(button_name, KeySequence(sequence)));
                 }
             }
         }

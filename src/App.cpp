@@ -37,6 +37,8 @@ void App::HandleInput()
 {
     auto user_ready_button = User::GetInstance()->GetKeyBind("ReadyButton");
     auto user_retry_button = User::GetInstance()->GetKeyBind("RetryButton");
+    auto user_drop_mana_button = User::GetInstance()->GetKeyBind("DropGreenManaButton");
+
     auto initiate_buff = User::GetInstance()->GetKeyBind("InitiateBuff");
 
     if (user_ready_button.IsKeysPressed())
@@ -69,6 +71,12 @@ void App::HandleInput()
             }else if(win.IsBuffing()){
                 win.StopInitiateBuffing();
             }
+        }
+    }else if(user_drop_mana_button.IsKeysPressed()){
+        for (auto &win : m_AltWindows)
+        {
+            KeySequence key_sequence("CONTROL M", ' ');
+            key_sequence.PressKeys(win, 50 , 50);
         }
     }
 }

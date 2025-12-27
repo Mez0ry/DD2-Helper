@@ -3,6 +3,7 @@
         "KeyBinds": {
             "RetryButton": "Y",
             "ReadyButton": "MBUTTON",
+            "DropGreenManaButton": ["CONTROL", "X"],
             "InitiateBuff": ["X_BUTTON1"]
         }
     }

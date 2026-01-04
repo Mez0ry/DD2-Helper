@@ -9,13 +9,39 @@
 #include <algorithm>
 #include <thread>
 
-App::App() : m_bIsRunning(true), m_HostWindow(Window::Find(L"Dungeon Defenders 2")){
+#include "Player.hpp"
+#include "AutoReady.hpp"
+#include "InitiateBuff.hpp"
+#include "DropGreenMana.hpp"
+
+App::App() : m_bIsRunning(true), m_HostWindow(std::make_shared<Window>(Window::Find(L"Dungeon Defenders 2"))){
     
     m_AltWindows = Window::FindAll(L"[#] Dungeon Defenders 2 [#]");
+    m_WindowList.AddWindow(m_HostWindow);
+    m_WindowList.AddWindow(m_AltWindows);
+
+    for(auto& win : m_WindowList){
+        m_PlayerList.AddPlayer(std::make_shared<Player>(win));
+    }
+    
+    auto user_auto_ready = User::GetInstance()->GetKeyBind("AutoReady");
+    auto user_drop_mana_button = User::GetInstance()->GetKeyBind("DropGreenManaButton");
+
+    auto initiate_buff = User::GetInstance()->GetKeyBind("InitiateBuff");
+    
+    m_Commands.push_back(MakeMirroredSendPlayersInput("RetryButton", m_PlayerList));
+    m_Commands.push_back(MakeMirroredSendPlayersInput("ReadyButton", m_PlayerList));
+    
+    m_Commands.push_back(std::make_shared<AutoReady>(user_auto_ready, m_PlayerList));
+    m_Commands.push_back(MakeConditionalCommand<InitiateBuff>([](){
+        return User::GetInstance()->GetKeyBind("InitiateBuff").IsKeysPressed();
+    }, m_PlayerList));
+
+    m_Commands.push_back(std::make_shared<DropGreenMana>(m_PlayerList));
 }
 
 App::~App() {
-
+    
 }
 
 void App::Run() {
@@ -35,49 +61,8 @@ void App::Run() {
 
 void App::HandleInput()
 {
-    auto user_ready_button = User::GetInstance()->GetKeyBind("ReadyButton");
-    auto user_retry_button = User::GetInstance()->GetKeyBind("RetryButton");
-    auto user_drop_mana_button = User::GetInstance()->GetKeyBind("DropGreenManaButton");
-
-    auto initiate_buff = User::GetInstance()->GetKeyBind("InitiateBuff");
-
-    if (user_ready_button.IsKeysPressed())
-    {
-        user_ready_button.PressKeys(m_HostWindow, 50, 50);
-
-        for (auto &win : m_AltWindows)
-        {
-            user_ready_button.PressKeys(win, 50, 50);
-        }
-
-    }else if(user_retry_button.IsKeysPressed()){
-        user_retry_button.PressKeys(m_HostWindow, 50, 50);
-
-        for (auto &win : m_AltWindows)
-        {
-            user_retry_button.PressKeys(win, 50, 50);
-        }
-    }else if(initiate_buff.IsKeysPressed()){
-
-        if(m_HostWindow.IsForegrounded() && !m_HostWindow.IsBuffing()){
-            m_HostWindow.StartInitiateBuffing();
-        }else if(m_HostWindow.IsBuffing()){
-            m_HostWindow.StopInitiateBuffing();
-        }
-
-        for(auto& win : m_AltWindows){
-            if(win.IsForegrounded() && !win.IsBuffing()){
-                win.StartInitiateBuffing();
-            }else if(win.IsBuffing()){
-                win.StopInitiateBuffing();
-            }
-        }
-    }else if(user_drop_mana_button.IsKeysPressed()){
-        for (auto &win : m_AltWindows)
-        {
-            KeySequence key_sequence("CONTROL M", ' ');
-            key_sequence.PressKeys(win, 50 , 50);
-        }
+    for(auto& command : m_Commands){
+        command->Execute();
     }
 }
 

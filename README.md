@@ -1,6 +1,6 @@
 # DD2-Helper
 
-This project contains utility functions to assist you in various ways, such as auto-ready features, syncing input between your game clients, and much more. Additional features will be added in the future.
+This project contains utility functions to assist you in various ways, such as auto-ready features, syncing input between your game instances, and much more. Additional features will be added in the future.
 
 ---
 

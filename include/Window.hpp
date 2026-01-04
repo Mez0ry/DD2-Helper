@@ -13,10 +13,6 @@ private:
     std::wstring m_WindowTitle, m_PrevWindowTitle;
     HWND m_WindowHandle, m_PrevWindowHandle;
     std::optional<DWORD> m_ProcessId{std::nullopt};
-    std::vector<std::function<void()>> m_Actions;
-    std::atomic<bool> m_IsBuffing{false};
-    std::vector<std::future<void>> m_Futures;
-
 public:
     Window() = default;
 
@@ -33,12 +29,9 @@ public:
         , m_PrevWindowTitle(other.m_PrevWindowTitle)
         , m_WindowHandle(other.m_WindowHandle)
         , m_ProcessId(other.m_ProcessId)
-        , m_Actions(other.m_Actions)
-        , m_IsBuffing(false)
-        , m_Futures() 
     {}
 
-    static std::vector<Window> FindAll(std::wstring window_title);
+    static std::vector<std::shared_ptr<Window>> FindAll(std::wstring window_title);
     static Window Find(std::wstring window_title);
 
     std::wstring GetTitle() const {
@@ -65,6 +58,10 @@ public:
         return m_WindowHandle;
     }
 
+    operator HWND(){
+        return m_WindowHandle;
+    }
+
     void SetWindowTitle(const std::wstring& window_title){
         m_PrevWindowTitle = m_WindowTitle;
 
@@ -76,11 +73,18 @@ public:
     bool IsForegrounded() const {
         return (*this) == GetForegroundWindow();
     }
-    
+};
+
+class WindowList{
 public:
-    bool IsBuffing() const{return m_IsBuffing.load();}
-    void StartInitiateBuffing();
-    void StopInitiateBuffing();
+    void AddWindow(std::shared_ptr<Window> window);
+    void AddWindow(std::vector<std::shared_ptr<Window>> window);
+    void RemoveWindow(std::shared_ptr<Window> window);
+
+    auto begin() {return m_Windows.begin();}
+    auto end(){return m_Windows.end();}
+
 private:
+    std::vector<std::shared_ptr<Window>> m_Windows;
 };
 #endif //!__WINDOW_HPP__

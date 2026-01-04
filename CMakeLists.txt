@@ -65,7 +65,13 @@ set(HEADER_FILES
     ${CMAKE_SOURCE_DIR}/include/UserConfig.hpp
     ${CMAKE_SOURCE_DIR}/include/JsonFileWatcher.hpp
     ${CMAKE_SOURCE_DIR}/include/KeySequence.hpp
+    ${CMAKE_SOURCE_DIR}/include/Player.hpp
 
+    ${CMAKE_SOURCE_DIR}/include/Commands/ICommand.hpp
+    ${CMAKE_SOURCE_DIR}/include/Commands/InitiateBuff.hpp
+    ${CMAKE_SOURCE_DIR}/include/Commands/AutoReady.hpp
+    ${CMAKE_SOURCE_DIR}/include/Commands/SendInputCommand.hpp
+    ${CMAKE_SOURCE_DIR}/include/Commands/DropGreenMana.hpp
 )
 
 set(SOURCE_FILES 
@@ -77,6 +83,13 @@ set(SOURCE_FILES
     ${CMAKE_SOURCE_DIR}/src/UserConfig.cpp
     ${CMAKE_SOURCE_DIR}/src/JsonFileWatcher.cpp
     ${CMAKE_SOURCE_DIR}/src/KeySequence.cpp
+
+    ${CMAKE_SOURCE_DIR}/src/Player.cpp
+
+    ${CMAKE_SOURCE_DIR}/src/Commands/InitiateBuff.cpp
+    ${CMAKE_SOURCE_DIR}/src/Commands/AutoReady.cpp
+    ${CMAKE_SOURCE_DIR}/src/Commands/SendInputCommand.cpp
+    ${CMAKE_SOURCE_DIR}/src/Commands/DropGreenMana.cpp
 )
 
 add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES})
@@ -86,15 +99,11 @@ if(${CMAKE_BUILD_TYPE} MATCHES "Release")
         target_compile_options(${PROJECT_NAME} PRIVATE
             -O3
             -DNDEBUG                  
-            -march=native    
-            -mtune=native
-            -funroll-loops   
-            -fomit-frame-pointer
         )
     endif()
 endif()
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/include/Commands)
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 
 #target properties

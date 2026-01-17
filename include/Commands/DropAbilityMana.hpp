@@ -12,7 +12,7 @@ private:
     PlayerList &m_PlayerList;
     bool m_OnlyAlts;
 public:
-    DropAbilityMana() = default;
+    DropAbilityMana() = delete;
     DropAbilityMana(PlayerList& player_list, bool only_alts = true);
     DropAbilityMana(PlayerList& player_list, const KeySequence& sequence, bool only_alts = true);
 

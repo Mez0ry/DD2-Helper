@@ -13,6 +13,7 @@
 #include "AutoReady.hpp"
 #include "InitiateBuff.hpp"
 #include "DropBuildResource.hpp"
+#include "DropAbilityMana.hpp"
 
 App::App() : m_bIsRunning(true), m_HostWindow(std::make_shared<Window>(Window::Find(L"Dungeon Defenders 2"))){
     
@@ -25,9 +26,6 @@ App::App() : m_bIsRunning(true), m_HostWindow(std::make_shared<Window>(Window::F
     }
     
     auto user_auto_ready = User::GetInstance()->GetKeyBind("AutoReady");
-    auto user_drop_mana_button = User::GetInstance()->GetKeyBind("DropGreenManaButton");
-
-    auto initiate_buff = User::GetInstance()->GetKeyBind("InitiateBuff");
     
     m_Commands.push_back(MakeMirroredSendPlayersInput("RetryButton", m_PlayerList));
     m_Commands.push_back(MakeMirroredSendPlayersInput("ReadyButton", m_PlayerList));
@@ -38,6 +36,7 @@ App::App() : m_bIsRunning(true), m_HostWindow(std::make_shared<Window>(Window::F
     }, m_PlayerList));
 
     m_Commands.push_back(std::make_shared<DropBuildResource>(m_PlayerList));
+    m_Commands.push_back(std::make_shared<DropAbilityMana>(m_PlayerList));
 }
 
 void App::Run() {

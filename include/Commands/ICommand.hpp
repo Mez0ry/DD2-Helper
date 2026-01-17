@@ -4,11 +4,10 @@
 #include <memory>
 
 class ICommand{
-    public:
+public:
     virtual ~ICommand() {}
 
     virtual void Execute() = 0;
-
 };
 
 template <typename TCommand>
@@ -16,7 +15,7 @@ class IConditionalCommand final : public ICommand {
 private:
     std::function<bool()> m_Pred;
     TCommand m_Command;
-
+    
 public:
     IConditionalCommand(const TCommand& command, std::function<bool()> pred) : m_Command(command), m_Pred(pred) {}
     ~IConditionalCommand() = default;

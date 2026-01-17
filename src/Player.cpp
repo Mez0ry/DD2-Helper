@@ -1,6 +1,7 @@
 #include "Player.hpp"
 #include "Window.hpp"
 #include "KeySequence.hpp"
+#include "UserConfig.hpp"
 
 #include <thread>
 #include <algorithm>
@@ -55,6 +56,20 @@ void Player::StopInitiateBuffing() {
 
     m_Futures.clear();
 }
+
+void Player::DropBuildResource(uint16_t hold_time_ms, uint16_t button_released_time_ms) {
+    KeySequence key_sequence(User::GetInstance()->GetKeyBind("DropBuildResourceInGameBind"));
+    key_sequence.PressKeys(m_Window->GetWindowDescriptor(), 50 , 50);
+}
+
+void Player::DropMana(uint16_t hold_time_ms, uint16_t button_released_time_ms) {
+    KeySequence key_sequence(User::GetInstance()->GetKeyBind("DropAbilityManaInGameBind"));
+    key_sequence.PressKeys(m_Window->GetWindowDescriptor(), 50 , 50);
+}
+
+void Player::StartAutoReady() {}
+
+void Player::StopAutoReady() {}
 
 void PlayerList::AddPlayer(std::shared_ptr<Player> player) {
     m_Players.push_back(player);

@@ -16,17 +16,14 @@ private:
     PlayerList m_PlayerList;
     std::atomic<bool> m_IsInitiateBuffing{false};
     std::vector<std::shared_ptr<ICommand>> m_Commands;
-    
 public:
     App();
-    ~App();
+    ~App() = default;
     
     void Run();
-
 private:
     void HandleInput();
     void Update();
     void Render();
-private:
 };
 #endif //!__APP_HPP__

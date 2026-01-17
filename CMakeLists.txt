@@ -71,7 +71,8 @@ set(HEADER_FILES
     ${CMAKE_SOURCE_DIR}/include/Commands/InitiateBuff.hpp
     ${CMAKE_SOURCE_DIR}/include/Commands/AutoReady.hpp
     ${CMAKE_SOURCE_DIR}/include/Commands/SendInputCommand.hpp
-    ${CMAKE_SOURCE_DIR}/include/Commands/DropGreenMana.hpp
+    ${CMAKE_SOURCE_DIR}/include/Commands/DropBuildResource.hpp
+    ${CMAKE_SOURCE_DIR}/include/Commands/DropAbilityMana.hpp
 )
 
 set(SOURCE_FILES 
@@ -89,7 +90,8 @@ set(SOURCE_FILES
     ${CMAKE_SOURCE_DIR}/src/Commands/InitiateBuff.cpp
     ${CMAKE_SOURCE_DIR}/src/Commands/AutoReady.cpp
     ${CMAKE_SOURCE_DIR}/src/Commands/SendInputCommand.cpp
-    ${CMAKE_SOURCE_DIR}/src/Commands/DropGreenMana.cpp
+    ${CMAKE_SOURCE_DIR}/src/Commands/DropBuildResource.cpp
+     ${CMAKE_SOURCE_DIR}/src/Commands/DropAbilityMana.cpp
 )
 
 add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES})

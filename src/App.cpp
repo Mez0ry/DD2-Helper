@@ -12,7 +12,7 @@
 #include "Player.hpp"
 #include "AutoReady.hpp"
 #include "InitiateBuff.hpp"
-#include "DropGreenMana.hpp"
+#include "DropBuildResource.hpp"
 
 App::App() : m_bIsRunning(true), m_HostWindow(std::make_shared<Window>(Window::Find(L"Dungeon Defenders 2"))){
     
@@ -37,11 +37,7 @@ App::App() : m_bIsRunning(true), m_HostWindow(std::make_shared<Window>(Window::F
         return User::GetInstance()->GetKeyBind("InitiateBuff").IsKeysPressed();
     }, m_PlayerList));
 
-    m_Commands.push_back(std::make_shared<DropGreenMana>(m_PlayerList));
-}
-
-App::~App() {
-    
+    m_Commands.push_back(std::make_shared<DropBuildResource>(m_PlayerList));
 }
 
 void App::Run() {

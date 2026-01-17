@@ -5,15 +5,15 @@
 
 class PlayerList;
 
-class DropGreenMana : public ICommand
+class DropBuildResource : public ICommand
 {
 private:
     KeySequence m_KeySequence;
     PlayerList &m_PlayerList;
     bool m_OnlyAlts;
 public:
-    DropGreenMana(PlayerList& list, bool only_alts = true);
-    ~DropGreenMana() = default;
+    DropBuildResource(PlayerList& list, bool only_alts = true);
+    ~DropBuildResource() = default;
 
     void Execute() override;
 private:

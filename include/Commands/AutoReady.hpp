@@ -16,14 +16,10 @@ public:
     ~AutoReady() = default;
 
     void Execute() override;
+    
 private:
-    bool IsAutoReady() const{
-        return m_AutoReady.load();
-    }
-
-    void ToogleAutoReady(){
-        m_AutoReady.store(!IsAutoReady());
-    }
+    bool IsAutoReady() const;
+    void ToogleAutoReady();
 };
 
 #endif //!__READY_COMMAND_HPP__

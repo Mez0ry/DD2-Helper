@@ -18,3 +18,13 @@ void AutoReady::Execute() {
         SendPlayersInput::Execute();
     }
 }
+
+bool AutoReady::IsAutoReady() const
+{
+    return m_AutoReady.load();
+}
+
+void AutoReady::ToogleAutoReady()
+{
+    m_AutoReady.store(!IsAutoReady());
+}

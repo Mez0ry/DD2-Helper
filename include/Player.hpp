@@ -12,7 +12,6 @@ private:
     std::shared_ptr<Window> m_Window;
     std::atomic<bool> m_IsBuffing{false};
     std::vector<std::future<void>> m_Futures;
-
 public:
     Player(std::shared_ptr<Window> window);
     ~Player() = default;
@@ -22,6 +21,12 @@ public:
     bool IsBuffing() const {return m_IsBuffing.load();}
     void StartInitiateBuffing();
     void StopInitiateBuffing();
+
+    void DropBuildResource(uint16_t hold_time_ms = (uint16_t)0, uint16_t button_released_time_ms = (uint16_t)0);
+    void DropMana(uint16_t hold_time_ms = (uint16_t)0, uint16_t button_released_time_ms = (uint16_t)0);
+
+    void StartAutoReady();
+    void StopAutoReady();
 private:
 };
 

@@ -1,7 +1,7 @@
 ## Preview
 
-<img src="preview/light.png" alt="PreviewLight" width="200" height="200">
-
+<img src="preview/light.png" alt="PreviewLight" width="600" height="600">
+<img src="preview/dark.png" alt="PreviewDark" width="600" height="600">
 ## 🚀 Usage
 Go to the latest release and download the DD2-Helper and then run the executable file and you're good to go
 
@@ -15,7 +15,3 @@ Contributions are welcome! Please open an issue or pull request.
 Email - mez0ry@mail.ru
 
 Discord - Mezory#rand172346
-
-
-![PreviewLight](preview/light.png)
-![PreviewDark](preview/dark.png)

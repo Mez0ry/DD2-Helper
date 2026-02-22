@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/app_styles/dark_theme.qss</file>
+        <file>resources/icons/dark/find_windows.svg</file>
+        <file>resources/icons/dark/settings.svg</file>
+        <file>resources/icons/generic/dark_mode.svg</file>
+        <file>resources/icons/generic/light_mode.svg</file>
+        <file>resources/app_styles/light_theme.qss</file>
+        <file>resources/icons/dark/check_mark.svg</file>
+        <file>resources/icons/generic/save.svg</file>
+    </qresource>
+</RCC>

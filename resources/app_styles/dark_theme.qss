@@ -1,0 +1,194 @@
+/* Основной фон окна - глубокий темный цвет */
+QMainWindow#MainWindow {
+    background-color: rgb(20, 20, 30);
+}
+
+/* Фон центрального виджета - чуть светлее для контраста */
+QWidget#centralwidget {
+    background-color: rgb(30, 30, 40);
+}
+
+/* Метки - светлый серый для хорошей читаемости */
+QLabel {
+    color: #CCCCCC;
+}
+
+/* LineEdit - темный фон с мягкой рамкой и акцентом при фокусе */
+QLineEdit {
+    border: 2px solid #555555;
+    border-radius: 20px;
+    color: #FFFFFF;
+    background-color: #2b2b2b;
+    font-size: 9pt;
+}
+
+QLineEdit:hover {
+    border: 2px solid #777777;
+}
+
+QLineEdit:focus {
+    border: 1px solid rgba(219, 93, 98, 0.8); /* мягкий голубой акцент */
+}
+
+/* Полоса прокрутки - темная с плавным светлым эффектом при наведении */
+QSlider::groove:horizontal {
+    border: 1px solid #555555;
+    height: 8px;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #555555, stop:1 #555555);
+    margin: 2px 0;
+}
+
+/* Ползунок - градиент голубого с эффектом свечения */
+QSlider::handle:horizontal {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #4facfe, stop:1 #00f2fe);
+    border: 1px solid #999999;
+    width: 18px;
+    margin: -2px 0;
+    border-radius: 3px;
+}
+
+/* Заполнение ползунка - мягкий голубой */
+QSlider::add-page:horizontal {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #3a3a3a, stop:1 #2a2a2a);
+}
+
+QSlider::sub-page:horizontal {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #444444, stop:1 #2f2f2f);
+}
+
+/* ComboBox - темный фон с тонкой рамкой */
+QComboBox {
+    border: 1px solid #999999;
+    border-radius: 3px;
+    padding: 1px 18px 1px 3px;
+    min-width: 6em;
+    background-color: #2b2b2b;
+    color: #FFFFFF;
+}
+
+QComboBox::drop-down {
+    border-left: 1px solid #999999;
+    background-color: #2b2b2b;
+    width: 15px;
+    border-radius: 0 3px 3px 0;
+}
+
+QComboBox QAbstractItemView {
+    background-color: #3a3a3a;
+    color: #FFFFFF;
+}
+
+/* Скроллбар - темный с плавным светлым эффектом при наведении */
+QScrollBar:vertical {
+    background-color: rgb(208, 134, 133);
+    width: 8px;
+    margin: 11px 0 11px 0;
+    border-radius: 4px;
+}
+
+QScrollBar::handle:vertical {
+    background-color: rgb(208, 134, 133);
+    min-height: 30px;
+    border-radius: 4px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background-color: rgba(226, 99, 103, 1);
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    background-color: rgb(243, 202, 201);
+    height: 15px;
+    border-radius: 4px;
+}
+
+/* Кнопка при наведении - мягкое свечение */
+QPushButton:hover:!pressed {
+    border: 1px solid rgba(219, 93, 98, 0.8);
+    border-radius: 6px;
+    background-color: #3a3a3a;
+}
+
+/* Tooltip - темный фон с прозрачностью */
+QToolTip {
+    color: #FFFFFF;
+    background-color: #222;
+    border: 1px solid #444;
+}
+
+/* Чекбоксы - современный стиль с акцентом при выборе */
+QCheckBox {
+    spacing: 5px;
+    color: #CCCCCC;
+}
+
+QCheckBox::indicator {
+    width: 15px;
+    height: 15px;
+}
+
+QCheckBox::indicator:unchecked {
+    border: 1px solid #999999;
+    background-color: transparent;
+}
+
+QCheckBox::indicator:checked {
+    image: url(:/resources/icons/dark/check_mark.svg);
+    background-color: transparent;
+    border: 1px solid rgba(219, 93, 98, 0.8);
+}
+
+/* Вкладки - стиль с яркими акцентами */
+QTabBar::tab {
+    color: #CCCCCC;
+    font-weight: 500;
+    padding: 6px 8px;
+    margin-right: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    background-color: #222;
+}
+
+QTabBar::tab:selected {
+    background-color: #393E46; /* темный голубой для активной вкладки */
+    border-bottom: 3px solid #FF79C6; /* можно заменить на другой нейтральный цвет */
+    margin-bottom: -3px;
+    color: #FFFFFF;
+}
+
+QTabBar::tab:!selected {
+    background-color: #222;
+    color: #888;
+    margin-bottom: -2px;
+}
+
+QTabBar::tab:hover {
+    background-color: #444;
+    color: #FFFFFF;
+}
+
+/* Панель содержимого вкладки */
+QTabWidget::pane {
+    background-color: rgba(18, 10, 22, 0.21);
+    border: 0px solid #444;
+    margin: 5px;
+}
+
+#InfoPopup{
+ /* under text rgba(24, 24, 39, 1)*/
+  border-radius: 24px;
+  padding: 10px;
+}
+
+#InfoPopup QLabel#TitleLabel {
+  font-weight: bold;
+  font-size: 18px;
+  color: rgba(255, 101, 101, 1);
+}
+
+#InfoPopup QLabel#DescriptionLabel {
+  font-weight: medium;
+  font-size: 12px;
+  color: rgba(177, 178, 189, 0.8);
+}

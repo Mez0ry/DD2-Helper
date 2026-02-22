@@ -1,5 +1,7 @@
 ## Preview
 
+<img src="preview/light.png" alt="PreviewLight" width="200" height="200">
+
 ## 🚀 Usage
 Go to the latest release and download the DD2-Helper and then run the executable file and you're good to go
 

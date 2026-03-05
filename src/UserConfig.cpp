@@ -1,10 +1,12 @@
 #include "UserConfig.hpp"
+#include <QJsonArray>
 #include "HotKeySequence.hpp"
+#include "Network.hpp"
 #include <KeyboardInput.hpp>
 #include <MouseInput.hpp>
 #include <mutex>
+#include <qlibraryinfo.h>
 #include <qmutex.h>
-#include <QJsonArray>
 
 std::once_flag UserConfig::m_InitFlag;
 std::shared_ptr<UserConfig> UserConfig::m_Instance;
@@ -157,5 +159,48 @@ void UserConfig::LoadConfig(const char delimiter) const
             }
         }
     }
+
+    if(UserConfig_object.contains("VERSION")){
+        const QJsonObject version_object = UserConfig_object.value("VERSION").toObject();
+
+        auto found_version = version_object.find("CURRENT_VERSION");
+        auto latest_release_url = version_object.find("GET_LATEST_RELEASE_URL");
+
+        m_CurrentVersion = NormalizeVersion(found_version.value().toString());
+        m_LatestReleaseUrl = latest_release_url.value().toString();
+    }
     emit IsParsed();
+}
+
+QVersionNumber UserConfig::GetVersion() const
+{
+    return m_CurrentVersion;
+}
+
+QVersionNumber UserConfig::GetLatestReleaseVersion() const
+{
+    std::shared_ptr<QNetworkRequest> version_request(std::make_shared<QNetworkRequest>(QUrl(m_LatestReleaseUrl)));
+    auto version_reply = Network::NetManager->get(*version_request);
+    QEventLoop loop;
+    QObject::connect(version_reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+    loop.exec();
+
+    QRestReply rest_reply(version_reply);
+    if (rest_reply.isSuccess()) {
+        if (std::optional<QJsonDocument>
+            json
+            = rest_reply.readJson()) {
+            auto root_obj = json.value().object();
+            return NormalizeVersion(root_obj.find("tag_name").value().toString());
+        }
+    }
+    return m_CurrentVersion;
+}
+
+QVersionNumber UserConfig::NormalizeVersion(QString version) const {
+    if (version.startsWith('v') || version.startsWith('V')) {
+        version.remove(0, 1);
+    }
+
+    return QVersionNumber::fromString(version);
 }

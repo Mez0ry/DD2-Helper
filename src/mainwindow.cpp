@@ -1,6 +1,7 @@
 #include "mainwindow.h"
-#include "Popup.hpp"
+#include "Network.hpp"
 #include "PlayerWidget.hpp"
+#include "Popup.hpp"
 #include "SendHotkey.hpp"
 #include "ui_mainwindow.h"
 
@@ -8,7 +9,9 @@
 #include <QSettings>
 #include "UserConfig.hpp"
 #include "Utils.hpp"
+#include <qlibraryinfo.h>
 #include <qtimer.h>
+#include "CustomButtons.hpp"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -22,6 +25,17 @@ MainWindow::MainWindow(QWidget *parent)
     settings.setValue("light_theme",":/resources/app_styles/light_theme.qss");
     settings.endGroup();
 
+    Network::InitializeNetManager();
+
+    auto timer = new QTimer();
+
+    timer->setSingleShot(false);
+    timer->start(60 * 1000);
+    \
+    connect(timer, &QTimer::timeout, this, [this](){
+        this->CheckUpdate();
+    });
+
     connect(UserConfig::GetInstance().get(), &UserConfig::IsParsed, [&](){
         qDebug() << "User config has been successfully deseralized" << '\n';
         try {
@@ -29,7 +43,7 @@ MainWindow::MainWindow(QWidget *parent)
 
             connect(ui->save_hotkey_button, &QPushButton::clicked, this, [](){
                 UserConfig::GetInstance()->SaveConfig();
-                Popup::ShowInfo("Information", "User hotkeys successfully saved");
+                PopupManager::GetInstance().AddPopup<IPopup>(QString("Information"), QString("User hotkeys successfully saved"), empty_buttons_t(), 3000);
             });
 
             struct KeyPair {
@@ -54,8 +68,7 @@ MainWindow::MainWindow(QWidget *parent)
 
                 connect(pair.edit_field, &HotKeyEdit::HotkeyChanged, [pair](){
                     QString info_text = QString("hotkey for %1 is now: %2").arg(pair.key_name, pair.edit_field->GetText());
-                    Popup::ShowInfo("Hotkey changed", info_text);
-
+                    PopupManager::GetInstance().AddPopup<IPopup>(QString("Information"), info_text, empty_buttons_t(), 1500);
                     UserConfig::GetInstance()->ChangeKeyBind(pair.key_name, HotKeySequence(pair.edit_field->GetText().toStdString()));
                 });
 
@@ -64,7 +77,8 @@ MainWindow::MainWindow(QWidget *parent)
             qDebug() << "Hotkeys loaded successfully.";
         } catch (const std::exception& e) {
             qWarning() << "Error loading hotkeys: " << e.what();
-            Popup::ShowInfo("Error", "Failed to load hotkeys");
+
+            PopupManager::GetInstance().AddPopup<IPopup>(QString("Information"), "Failed to load hotkeys", empty_buttons_t(), 1500);
         }
     });
 
@@ -100,7 +114,7 @@ MainWindow::MainWindow(QWidget *parent)
         }
 
         if(!m_WindowList){
-            Popup::ShowInfo("Information", "DD2 windows were not found, are you sure that you launched the game?");
+            PopupManager::GetInstance().AddPopup<IPopup>(QString("Information"), QString("DD2 windows were not found, are you sure that you launched the game?"), empty_buttons_t(), 3000);
             return;
         }
 
@@ -171,6 +185,26 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete m_UserInterface;
+}
+
+void MainWindow::CheckUpdate() {
+    auto current_version = UserConfig::GetInstance()->GetVersion();
+    auto latest_version = UserConfig::GetInstance()->GetLatestReleaseVersion();
+
+    if(current_version < latest_version && !current_version.isNull()){
+
+        QString description = QString("New version %1 come out").arg(latest_version.toString());
+
+        QList<std::shared_ptr<QPushButton>> buttons;
+        buttons.push_back(std::make_shared<SvgLinkButton>("Check this out", "://resources/icons/generic/more_down.svg", QUrl("https://github.com/Mez0ry/DD2-Helper/releases")));
+        /*
+         * @TODO fix it: Breaks when huge title, width of the rect widget too big
+        */
+        Popup::CustomPopup("New update available", description, 3000, QIcon(":/resources/icons/dark/find_windows.svg"), buttons);
+
+    }else{
+        qDebug() << "Application is up to date, current application version: " << current_version.toString() << " latest release version " << latest_version.toString();
+    }
 }
 
 void MainWindow::Update() {
@@ -254,7 +288,6 @@ void MainWindow::Update() {
             }
 
             std::for_each(start_iter, end_iter, drop_type.action);
-
         }
     }
 

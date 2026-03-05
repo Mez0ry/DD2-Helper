@@ -37,7 +37,6 @@ public:
     bool IsSingleKey() const;
 private:
     static VKeys GetKeyFromStr(const std::string& key);
-
 private:
     std::vector<VKeys> m_HotKeySequence;
     std::vector<std::string> m_HotkeyStrList;

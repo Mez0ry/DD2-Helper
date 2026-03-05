@@ -8,5 +8,11 @@
         <file>resources/app_styles/light_theme.qss</file>
         <file>resources/icons/dark/check_mark.svg</file>
         <file>resources/icons/generic/save.svg</file>
+        <file>resources/icons/logo/logo.png</file>
+        <file>resources/icons/generic/done_check_circle.svg</file>
+        <file>resources/icons/generic/exclamation_mark.svg</file>
+        <file>resources/icons/generic/process_done.svg</file>
+        <file>resources/icons/generic/close.svg</file>
+        <file>resources/icons/generic/more_down.svg</file>
     </qresource>
 </RCC>

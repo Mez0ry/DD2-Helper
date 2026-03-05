@@ -14,8 +14,8 @@ set(UI_DIRECTORY "${CMAKE_SOURCE_DIR}/ui")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Gui  Widgets LinguistTools)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Gui  Widgets Network LinguistTools Svg)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network LinguistTools Svg)
 
 set(TS_FILES DD2-Helper_en_001.ts)
 
@@ -71,6 +71,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         include/Popup.hpp
 
         src/Popup.cpp
+        include/Network.hpp
+        src/Network.cpp
+        include/CustomButtons.hpp
+        src/CustomButtons.cpp
     )
 
     qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
@@ -91,7 +95,7 @@ endif()
 
 qt_add_ui(${TARGET_NAME} SOURCES ${UI_DIRECTORY}/mainwindow.ui)
 target_include_directories(${TARGET_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include" ${TARGET_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include/Commands" "${CMAKE_CURRENT_SOURCE_DIR}/ui")
-target_link_libraries(${TARGET_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(${TARGET_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Svg)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_forms})
 

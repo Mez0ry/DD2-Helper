@@ -6,14 +6,13 @@
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QMutex>
 #include <QString>
-#include <memory>
+#include <QObject>
+
 #include <mutex>
+#include <qversionnumber.h>
 
 #include "HotKeySequence.hpp"
-
-#include <QObject>
 
 class UserConfig final : public QObject
 {
@@ -23,11 +22,12 @@ public:
 private:
     static std::once_flag m_InitFlag;
     static std::shared_ptr<UserConfig> m_Instance;
+private:
     QString m_ConfigPath;
     mutable std::unordered_map<QString, HotKeySequence> m_KeyBindsStr;
     const QString m_UserConfigPath{QString(QCoreApplication::applicationDirPath() + "/resources/user.json")};
-
-    explicit UserConfig(Private) {}
+    mutable QVersionNumber m_CurrentVersion;
+    mutable QString m_LatestReleaseUrl;
 signals:
     bool IsParsed() const;
 public:
@@ -39,5 +39,12 @@ public:
 
     void SaveConfig() const;
     void LoadConfig(const char delimiter = '+') const;
+public:
+    QVersionNumber GetVersion() const;
+
+    [[nodiscard]] QVersionNumber GetLatestReleaseVersion() const;
+private:
+    QVersionNumber  NormalizeVersion(QString) const;
+    explicit UserConfig(Private) {}
 };
 #endif // __USER_CONFIG_HPP__

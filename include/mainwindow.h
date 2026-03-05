@@ -6,6 +6,9 @@
 #include "Player.hpp"
 #include "Window.hpp"
 #include "qmainwindow.h"
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkReply>
+#include <memory>
 
 QT_BEGIN_NAMESPACE
 
@@ -36,6 +39,7 @@ public:
         return m_UserInterface;
     }
 
+    void CheckUpdate();
 public slots:
     void Update();
 private:
